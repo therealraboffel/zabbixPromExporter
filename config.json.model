@@ -4,8 +4,10 @@
         "url": "http://zabbix.domain.org",
         "user": "user zabbix",
         "password": "password zabbix",
-        "tag": "",      // adds configs for tag and value
-        "value": ""
+        "filter": {
+            "tag": "",
+            "value": ""
+        }
     },
     "exporter":{
         "hostlist": []
