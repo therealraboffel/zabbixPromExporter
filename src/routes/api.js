@@ -26,7 +26,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
     let problemValue = params.problem_value || ''
     delete params.problem_tag
     delete params.problem_value
-    let problemParams = {}
+    let problemParams = {output: "extend"}
     if (problemTag) {
       problemParams.tags = [{tag: problemTag, value: problemValue, operator: 'equals'}]
       problemParams.evaltype = 0
