@@ -39,6 +39,10 @@ function zbx_pb_to_prometheus(zbxcli,params) {
 
   function zbx_items_to_prometheus(zbxcli,params) {
     return new Promise((resolve, reject) => {
+      let itemTag = params.item_tag || ''
+      let itemValue = params.item_value || ''
+      delete params.item_tag
+      delete params.item_value
       meta_name1="zabbix_item"
       lines1="# HELP "+meta_name1+' item zabbix\n# TYPE '+meta_name1+' gauge'+'\n'
       output1=lines1
@@ -46,7 +50,12 @@ function zbx_pb_to_prometheus(zbxcli,params) {
       .then((hosts) => {
         (async function loop() {
           for( let i=0 ;i < hosts.length;i++){
-            await getitems(zbxcli,{hostids: hosts[i].hostid}).then(items => {
+            let itemParams = {hostids: hosts[i].hostid}
+            if (itemTag) {
+              itemParams.tags = [{tag: itemTag, value: itemValue, operator: 'equals'}]
+              itemParams.evaltype = 0
+            }
+            await getitems(zbxcli,itemParams).then(items => {
               items.forEach(function(item){ 
                 if( item.value_type == 0 || item.value_type==3){             
                   output1+=(meta_name1+'{name="'+item.name+'",host="'+hosts[i].name+'",value_type="'+item.value_type+'"} '+item.lastvalue+'\n')
@@ -117,7 +126,12 @@ router.post('/config/hosts', function(req, res, next) {
 
 
 router.get('/metrics/prometheus', function(req, res, next) {
-  const result =  Promise.all([zbx_pb_to_prometheus(res.locals.zbxcon,{}), zbx_items_to_prometheus(res.locals.zbxcon,{"filter": {"name": res.locals.config.exporter.hostlist},"output":["name","hostid"]})]).then(values => {
+  let params = {"filter": {"name": res.locals.config.exporter.hostlist},"output":["name","hostid"]}
+  if (res.locals.config.zbx.filter && res.locals.config.zbx.filter.tag) {
+    params.item_tag = res.locals.config.zbx.filter.tag
+    params.item_value = res.locals.config.zbx.filter.value || ''
+  }
+  const result =  Promise.all([zbx_pb_to_prometheus(res.locals.zbxcon,{}), zbx_items_to_prometheus(res.locals.zbxcon, params)]).then(values => {
 
     res.set('Content-Type', 'text/plain');
     for(i=0 ;i < values.length;i++){
