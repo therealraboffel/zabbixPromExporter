@@ -60,16 +60,22 @@ Set zbx values
 
     cat config.json
     {
-        "version": "0.1",
+        "version": "0.3",
         "zbx":{
             "url": "http://zabbix.domain.org",
             "user": "zabxapi",
-            "password": "zabxapi"
+            "password": "zabxapi",
+            "filter": {
+                "tag": "",
+                "value": ""
+            }
         },
         "exporter":{
             "hostlist": []
         }
     }
+
+If filter is set, only items and problems matching will be exported.
 
 Note: You can change configuration in application but you must restart the container if you change zabbix configuration 
 (The connection is for the moment made at the initiation )
