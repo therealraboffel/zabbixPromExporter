@@ -62,7 +62,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
         for( let i=0 ;i < hosts.length;i++){
           let itemParams = {hostids: [hosts[i].hostid]}
           if (itemTag) {
-            itemParams.tags = [{tag: itemTag, value: itemValue, operator: 'equals'}]
+            itemParams.tags = [{tag: itemTag, value: itemValue, operator: 1}]
             itemParams.evaltype = 0
           }
           const items = await getitems(zbxcli,itemParams)
