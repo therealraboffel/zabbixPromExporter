@@ -14,10 +14,7 @@ config.version="0.4"
 
 const zbxapi = require('./lib/zbxApi');
 const zabbixpromExporter = require('./lib/zbxPromExporter');
-var zbxcli = new zbxapi(config.zbx.url,config.zbx.user,config.zbx.token,config.debug)
-zbxcli.connect( function(response){
-  console.log(response.data.result)
-})
+var zbxcli = new zbxapi(config.zbx.url,config.zbx.token,config.debug)
 
 
 var applis = {  "status":1,"RootPath":__dirname}

@@ -64,7 +64,6 @@ Set zbx values
         "debug": false,
         "zbx":{
             "url": "http://zabbix.domain.org",
-            "user": "zabxapi",
             "token": "",
             "filter": {
                 "tag": "",
