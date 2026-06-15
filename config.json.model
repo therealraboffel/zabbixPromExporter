@@ -4,6 +4,7 @@
         "url": "http://zabbix.domain.org",
         "user": "user zabbix",
         "password": "password zabbix",
+        "token": "",
         "filter": {
             "tag": "",
             "value": ""

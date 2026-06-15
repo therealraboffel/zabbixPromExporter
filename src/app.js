@@ -14,7 +14,7 @@ config.version="0.4"
 
 const zbxapi = require('./lib/zbxApi');
 const zabbixpromExporter = require('./lib/zbxPromExporter');
-var zbxcli = new zbxapi(config.zbx.url,config.zbx.user,config.zbx.password)
+var zbxcli = new zbxapi(config.zbx.url,config.zbx.user,config.zbx.password,config.zbx.token)
 zbxcli.connect( function(response){
   console.log(response.data.result)
 })

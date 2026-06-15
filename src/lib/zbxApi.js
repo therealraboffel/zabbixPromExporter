@@ -3,10 +3,11 @@ const axios = require('axios').default;
 const { UV_FS_O_FILEMAP } = require('constants');
 // const { setMaxListeners } = require('../app');
 module.exports = class ZabbixApi {
-    constructor(url,usr,pass) {
+    constructor(url,usr,pass,apitoken) {
         this.url = url+'/api_jsonrpc.php';
         this.usr = usr;
         this.pass = pass;
+        this.apitoken = apitoken || null;
         this.token = null;
         this.lastaccessdate = null;
         this.accesscontrolmaxage = null;
@@ -44,6 +45,9 @@ module.exports = class ZabbixApi {
 
     connect(cb) {
         var self=this
+        var loginParams = self.apitoken
+            ? {"token": self.apitoken}
+            : {"user": self.usr, "password": self.pass}
         axios({
             method:'post',
             url: self.url,
@@ -52,10 +56,7 @@ module.exports = class ZabbixApi {
             data: {
                 jsonrpc: "2.0",
                 method: "user.login",
-                params: {
-                    "user": self.usr,
-                    "password": self.pass,
-                },
+                params: loginParams,
                 id: 1,
                 auth: self.token
             }
