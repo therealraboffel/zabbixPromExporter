@@ -94,7 +94,7 @@ const getitems = (zbxcli,param) => {
 /* GET home page. */
 router.get('/zbx/hosts', function(req, res, next) {
   res.locals.zbxcon.hosts({"output":["name","hostid"]}, function(data){
-    res.json(data)
+    res.json(data.result)
   })
 })
 
