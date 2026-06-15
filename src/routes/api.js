@@ -3,6 +3,17 @@ var express = require('express');
 var router = express.Router();
 const fs = require('fs');
 
+router.use(function(req, res, next) {
+  var uris = res.locals.config.exporter.uris_available
+  if (uris) {
+    var match = uris.find(function(u) { return u.uri === req.baseUrl + req.path })
+    if (!match || !match.enabled) {
+      return res.status(404).json({error: 'Not found'})
+    }
+  }
+  next()
+})
+
 
 const gethosts = (zbxcli,param) => { 
     return new Promise((resolve, reject) => {
