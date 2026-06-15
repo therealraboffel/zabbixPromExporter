@@ -7,6 +7,7 @@ const fs = require('fs');
 const gethosts = (zbxcli,param) => { 
     return new Promise((resolve, reject) => {
       zbxcli.hosts(param,(data) => {
+          if (data.error) return reject(data.error)
           resolve(data.result || [])
         })
     })
@@ -15,6 +16,7 @@ const gethosts = (zbxcli,param) => {
 const getproblems = (zbxcli,param) => { 
     return new Promise((resolve, reject) => {
       zbxcli.problems(param,(data) => {
+          if (data.error) return reject(data.error)
           resolve(data.result || [])
         })
      })
@@ -42,7 +44,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
           output+=meta_name+'{name="'+problems[i].name+'",objectid="'+problems[i].objectid+'"} '+problems[i].severity+'\n'
           }   
           resolve(output)
-      });
+      }).catch(err => reject(err));
     })
   }
 
@@ -71,13 +73,14 @@ function zbx_pb_to_prometheus(zbxcli,params) {
           })
         }
         resolve(output1)
-    })
+    }).catch(err => reject(err))
   })
 }
   
 const getitems = (zbxcli,param) => { 
   return new Promise((resolve, reject) => {
     zbxcli.items(param,(data) => {
+        if (data.error) return reject(data.error)
         resolve(data.result || []) 
       })
   })
@@ -101,7 +104,8 @@ router.get('/zbx/hosts', function(req, res, next) {
 router.get('/zbx/problems', function(req, res, next) {
   res.locals.zbxcon.problems({"output":"extend"}, function(data){
     if (data.error) {
-      res.json({result: []})
+      console.log('Zabbix problem.get error:', JSON.stringify(data.error))
+      res.json({result: [], error: data.error})
     } else {
       res.json(data)
     }
@@ -157,6 +161,8 @@ router.get('/metrics/prometheus', function(req, res, next) {
       res.write(values[i])
     }
     res.end()
+  }).catch(err => {
+    res.status(500).json({error: err.message || err})
   });
 })
 
