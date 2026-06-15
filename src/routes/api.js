@@ -60,7 +60,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
       gethosts(zbxcli,params)
       .then(async (hosts) => {
         for( let i=0 ;i < hosts.length;i++){
-          let itemParams = {hostids: hosts[i].hostid}
+          let itemParams = {hostids: [hosts[i].hostid]}
           if (itemTag) {
             itemParams.tags = [{tag: itemTag, value: itemValue, operator: 'equals'}]
             itemParams.evaltype = 0
