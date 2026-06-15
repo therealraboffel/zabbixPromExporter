@@ -143,7 +143,7 @@ router.post('/config/hosts', function(req, res, next) {
 
 
 router.get('/metrics/prometheus', function(req, res, next) {
-  let hostlist = res.locals.config.exporter.hostlist.length ? res.locals.config.exporter.hostlist : ["GFR1RGMACRMSQ02"]
+  let hostlist = res.locals.config.exporter.hostlist
   let params = {"filter": {"name": hostlist},"output":["name","hostid"]}
   if (res.locals.config.zbx.filter && res.locals.config.zbx.filter.tag) {
     params.item_tag = res.locals.config.zbx.filter.tag
