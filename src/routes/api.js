@@ -56,26 +56,21 @@ function zbx_pb_to_prometheus(zbxcli,params) {
       lines1="# HELP "+meta_name1+' item zabbix\n# TYPE '+meta_name1+' gauge'+'\n'
       output1=lines1
       gethosts(zbxcli,params)
-      .then((hosts) => {
-        (async function loop() {
-          for( let i=0 ;i < hosts.length;i++){
-            let itemParams = {hostids: hosts[i].hostid}
-            if (itemTag) {
-              itemParams.tags = [{tag: itemTag, value: itemValue, operator: 'equals'}]
-              itemParams.evaltype = 0
-            }
-            await getitems(zbxcli,itemParams).then(items => {
-              items.forEach(function(item){ 
-                if( item.value_type == 0 || item.value_type==3){             
-                  output1+=(meta_name1+'{name="'+item.name+'",host="'+hosts[i].name+'",value_type="'+item.value_type+'"} '+item.lastvalue+'\n')
-                }
-              })
-            })
-            if(i=== hosts.length-1){
-              resolve(output1)
-            }
+      .then(async (hosts) => {
+        for( let i=0 ;i < hosts.length;i++){
+          let itemParams = {hostids: hosts[i].hostid}
+          if (itemTag) {
+            itemParams.tags = [{tag: itemTag, value: itemValue, operator: 'equals'}]
+            itemParams.evaltype = 0
           }
-        })();
+          const items = await getitems(zbxcli,itemParams)
+          items.forEach(function(item){ 
+            if( item.value_type == 0 || item.value_type==3){             
+              output1+=(meta_name1+'{name="'+item.name+'",host="'+hosts[i].name+'",value_type="'+item.value_type+'"} '+item.lastvalue+'\n')
+            }
+          })
+        }
+        resolve(output1)
     })
   })
 }
