@@ -3,10 +3,11 @@ const axios = require('axios').default;
 const { UV_FS_O_FILEMAP } = require('constants');
 // const { setMaxListeners } = require('../app');
 module.exports = class ZabbixApi {
-    constructor(url,usr,apitoken) {
+    constructor(url,usr,apitoken,debug) {
         this.url = url+'/api_jsonrpc.php';
         this.usr = usr;
         this.apitoken = apitoken || null;
+        this.debug = debug || false;
         this.token = null;
         this.lastaccessdate = null;
         this.accesscontrolmaxage = null;
@@ -25,21 +26,24 @@ module.exports = class ZabbixApi {
 
     getinfo(method,params,cb){
         var self=this
-            axios({
-                method:'post',
-                url: self.url,
-                headers: {"content-type": "application/json"},
-                responseType: 'json',
-                data: {
-                    jsonrpc: "2.0",
-                    method: method,
-                    params: params,
-                    id: 1,
-                    auth: self.token
-                }
-            }).then(function( response){
-                cb(response.data)
-            })
+        var reqData = {
+            jsonrpc: "2.0",
+            method: method,
+            params: params,
+            id: 1,
+            auth: self.token
+        }
+        if (self.debug) console.log('-->', method, JSON.stringify(reqData))
+        axios({
+            method:'post',
+            url: self.url,
+            headers: {"content-type": "application/json"},
+            responseType: 'json',
+            data: reqData
+        }).then(function( response){
+            if (self.debug) console.log('<--', method, JSON.stringify(response.data))
+            cb(response.data)
+        })
     }   
 
     connect(cb) {
@@ -48,18 +52,21 @@ module.exports = class ZabbixApi {
             console.log('No API token configured')
             return cb({data: {error: {code: -1, message: 'No API token configured'}}})
         }
+        var reqData = {
+            jsonrpc: "2.0",
+            method: "user.login",
+            params: {"token": self.apitoken},
+            id: 1
+        }
+        if (self.debug) console.log('-->', 'user.login', JSON.stringify(reqData))
         axios({
             method:'post',
             url: self.url,
             headers: {'content-type': 'application/json'},
             responseType: 'json',
-            data: {
-                jsonrpc: "2.0",
-                method: "user.login",
-                params: {"token": self.apitoken},
-                id: 1
-            }
+            data: reqData
         }).then(function( response){
+           if (self.debug) console.log('<--', 'user.login', JSON.stringify(response.data))
            if (response.data.error) {
                console.log('Login failed:', JSON.stringify(response.data.error))
                self.status = 0
