@@ -7,7 +7,7 @@ const fs = require('fs');
 const gethosts = (zbxcli,param) => { 
     return new Promise((resolve, reject) => {
       zbxcli.hosts(param,(data) => {
-          resolve(data.result)
+          resolve(data.result || [])
         })
     })
   }
@@ -15,7 +15,7 @@ const gethosts = (zbxcli,param) => {
 const getproblems = (zbxcli,param) => { 
     return new Promise((resolve, reject) => {
       zbxcli.problems(param,(data) => {
-          resolve(data.result)
+          resolve(data.result || [])
         })
      })
   }
@@ -83,7 +83,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
 const getitems = (zbxcli,param) => { 
   return new Promise((resolve, reject) => {
     zbxcli.items(param,(data) => {
-        resolve(data.result) 
+        resolve(data.result || []) 
       })
   })
 }
