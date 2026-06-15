@@ -70,6 +70,9 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
+# Swap files
+*.swp
+
 # dotenv environment variables file
 .env
 .env.test
