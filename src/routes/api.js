@@ -99,7 +99,11 @@ router.get('/zbx/hosts', function(req, res, next) {
 
 router.get('/zbx/problems', function(req, res, next) {
   res.locals.zbxcon.problems({"output":"extend"}, function(data){
-    res.json(data)
+    if (data.error) {
+      res.json({result: []})
+    } else {
+      res.json(data)
+    }
   })
 })
 
