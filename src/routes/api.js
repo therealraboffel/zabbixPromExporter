@@ -90,7 +90,8 @@ const getitems = (zbxcli,param) => {
 router.get('/zbx/hosts', function(req, res, next) {
   res.locals.zbxcon.hosts({"output":["name","hostid"]}, function(data){
     if (data.error) {
-      res.json({result: []})
+      console.log('Zabbix host.get error:', JSON.stringify(data.error))
+      res.json({result: [], error: data.error})
     } else {
       res.json(data)
     }
