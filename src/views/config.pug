@@ -10,7 +10,7 @@ block content
           .form-group.row
             label.col-sm-2.col-form-label("for"=key) #{key}
             .col-sm-10
-              if(key == "password" || key == "token")
+              if(key == "token")
                 input.form-control(type="password" name= key ,id= key, value = val)
               else
                 input.form-control(type="string" name= key ,id= key, value = val)

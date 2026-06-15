@@ -64,7 +64,6 @@ Set zbx values
         "zbx":{
             "url": "http://zabbix.domain.org",
             "user": "zabxapi",
-            "password": "zabxapi",
             "token": "",
             "filter": {
                 "tag": "",
