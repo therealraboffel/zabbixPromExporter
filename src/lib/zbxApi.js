@@ -57,10 +57,14 @@ module.exports = class ZabbixApi {
                 jsonrpc: "2.0",
                 method: "user.login",
                 params: {"token": self.apitoken},
-                id: 1,
-                auth: self.token
+                id: 1
             }
         }).then(function( response){
+           if (response.data.error) {
+               console.log('Login failed:', JSON.stringify(response.data.error))
+               self.status = 0
+               return cb(response)
+           }
            self.token = response.data.result
            self.lastaccessdate=response.headers['date']
            self.accesscontrolmaxage= response.headers['access-control-max-age']
