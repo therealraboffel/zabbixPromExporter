@@ -60,7 +60,7 @@ Set zbx values
 
     cat config.json
     {
-        "version": "0.3",
+        "version": "0.4",
         "zbx":{
             "url": "http://zabbix.domain.org",
             "user": "zabxapi",

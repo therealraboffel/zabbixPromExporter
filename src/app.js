@@ -10,7 +10,7 @@ var apiRouter = require('./routes/api');
 
 
 var config = require("./config");
-config.version="0.3"
+config.version="0.4"
 
 const zbxapi = require('./lib/zbxApi');
 const zabbixpromExporter = require('./lib/zbxPromExporter');
