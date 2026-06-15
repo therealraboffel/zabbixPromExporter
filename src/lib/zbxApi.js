@@ -44,9 +44,10 @@ module.exports = class ZabbixApi {
 
     connect(cb) {
         var self=this
-        var loginParams = self.apitoken
-            ? {"token": self.apitoken}
-            : {"user": self.usr}
+        if (!self.apitoken) {
+            console.log('No API token configured')
+            return cb({data: {error: {code: -1, message: 'No API token configured'}}})
+        }
         axios({
             method:'post',
             url: self.url,
@@ -55,7 +56,7 @@ module.exports = class ZabbixApi {
             data: {
                 jsonrpc: "2.0",
                 method: "user.login",
-                params: loginParams,
+                params: {"token": self.apitoken},
                 id: 1,
                 auth: self.token
             }
