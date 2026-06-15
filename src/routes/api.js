@@ -45,8 +45,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
       problemParams.evaltype = 0
     }
     meta_name="zabbix_problem"
-    lines="# HELP "+meta_name+' problem zabbix\n# TYPE '+meta_name+' gauge'+'\n'
-    output=lines
+    output=''
     
     getproblems(zbxcli,problemParams)
     .then(function(problems)  {
@@ -66,8 +65,7 @@ function zbx_pb_to_prometheus(zbxcli,params) {
       delete params.item_tag
       delete params.item_value
       meta_name1="zabbix_item"
-      lines1="# HELP "+meta_name1+' item zabbix\n# TYPE '+meta_name1+' gauge'+'\n'
-      output1=lines1
+      output1=''
       gethosts(zbxcli,params)
       .then(async (hosts) => {
         for( let i=0 ;i < hosts.length;i++){

@@ -3,7 +3,7 @@ module.exports = class zbxPromExport {
         this.meta_name = meta_name;
         this.help = help;
         this.type = type;
-        this.accumulator="# HELP "+meta_name+' '+help+'\n# TYPE '+meta_name+' '+type+'\n'
+        this.accumulator=''
     }
     addmetric(host,item){ 
         var self=this
