@@ -44,8 +44,4 @@ module.exports = class ZabbixApi {
     items(params,cb){
         this.getinfo("item.get",params,cb)
     }
-
-    dump() {
-        return(JSON.stringify(this))
-    }
 }

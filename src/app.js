@@ -10,30 +10,13 @@ var apiRouter = require('./routes/api');
 
 
 var config = require("./config");
-config.version="0.4"
+config.version="0.5"
 
 const zbxapi = require('./lib/zbxApi');
-const zabbixpromExporter = require('./lib/zbxPromExporter');
 var zbxcli = new zbxapi(config.zbx.url,config.zbx.token,config.debug)
 
 
 var applis = {  "status":1,"RootPath":__dirname}
-
-const gethosts = (param) => { 
-  return new Promise((resolve, reject) => {
-    zbxcli.hosts(param,(data) => {
-        resolve(data.result)
-      })
-  })
-}
-
-const getitems = (param) => { 
-  return new Promise((resolve, reject) => {
-    zbxcli.items(param,(data) => {
-        resolve(data.result) 
-      })
-  })
-}
 
 var app = express();
 
