@@ -86,6 +86,8 @@ Set zbx values
 
 `uris_available` controls which API endpoints are accessible. Only URIs with `"enabled": true` respond; all others return 404. By default only `/api/status` and `/api/metrics/prometheus` are enabled.
 
+`debug` (`true`/`false`, default `false`) — when enabled, every Zabbix API request and response is printed to stdout (prefixed with `-->` and `<--`). Useful for troubleshooting API errors.
+
 If filter is set, only items and problems matching will be exported.
 
 Note: You can change configuration in application but you must restart the container if you change zabbix configuration 
