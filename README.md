@@ -71,9 +71,20 @@ Set zbx values
             }
         },
         "exporter":{
-            "hostlist": []
+            "hostlist": [],
+            "uris_available": [
+                {"uri": "/api/status", "enabled": true},
+                {"uri": "/api/metrics/prometheus", "enabled": true},
+                {"uri": "/api/zbx/hosts", "enabled": false},
+                {"uri": "/api/zbx/problems", "enabled": false},
+                {"uri": "/api/config", "enabled": false},
+                {"uri": "/api/setting", "enabled": false},
+                {"uri": "/api/config/hosts", "enabled": false}
+            ]
         }
     }
+
+`uris_available` controls which API endpoints are accessible. Only URIs with `"enabled": true` respond; all others return 404. By default only `/api/status` and `/api/metrics/prometheus` are enabled.
 
 If filter is set, only items and problems matching will be exported.
 
