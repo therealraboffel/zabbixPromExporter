@@ -72,6 +72,7 @@ Set zbx values
         },
         "exporter":{
             "hostlist": [],
+            "cache_time": 30,
             "uris_available": [
                 {"uri": "/api/status", "enabled": true},
                 {"uri": "/api/metrics/prometheus", "enabled": true},
@@ -83,6 +84,8 @@ Set zbx values
             ]
         }
     }
+
+`cache_time` (seconds, default `30`) — Zabbix API responses are cached for this duration. Within that window, repeated requests return the cached data instead of calling the Zabbix API. Set to `0` to disable caching.
 
 `uris_available` controls which API endpoints are accessible. Only URIs with `"enabled": true` respond; all others return 404. By default only `/api/status` and `/api/metrics/prometheus` are enabled.
 
