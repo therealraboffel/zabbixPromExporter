@@ -11,6 +11,7 @@
     },
     "exporter":{
         "hostlist": [],
+        "cache_time": 30,
         "uris_available": [
             {"uri": "/api/status", "enabled": true},
             {"uri": "/api/metrics/prometheus", "enabled": true},

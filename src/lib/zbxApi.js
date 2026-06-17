@@ -1,10 +1,12 @@
 const axios = require('axios').default;
 
 module.exports = class ZabbixApi {
-    constructor(url,apitoken,debug) {
+    constructor(url,apitoken,debug,cachetime) {
         this.url = url+'/api_jsonrpc.php';
         this.token = apitoken || null;
         this.debug = debug || false;
+        this.cache_time = cachetime || 0;
+        this.cache = {};
         this.status = this.token ? 1 : 0;
     }
     
@@ -18,6 +20,17 @@ module.exports = class ZabbixApi {
 
     getinfo(method,params,cb){
         var self=this
+        var cacheKey = method + JSON.stringify(params)
+
+        if (self.cache_time > 0 && self.cache[cacheKey]) {
+            var entry = self.cache[cacheKey]
+            if (Date.now() - entry.timestamp < self.cache_time * 1000) {
+                if (self.debug) console.log('CACHE', method, 'serving from cache')
+                cb(entry.data)
+                return
+            }
+        }
+
         var reqData = {
             jsonrpc: "2.0",
             method: method,
@@ -34,6 +47,9 @@ module.exports = class ZabbixApi {
             data: reqData
         }).then(function( response){
             if (self.debug) console.log('<--', method, JSON.stringify(response.data))
+            if (self.cache_time > 0) {
+                self.cache[cacheKey] = {data: response.data, timestamp: Date.now()}
+            }
             cb(response.data)
         })
     }   

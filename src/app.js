@@ -13,7 +13,7 @@ var config = require("./config");
 config.version="0.5"
 
 const zbxapi = require('./lib/zbxApi');
-var zbxcli = new zbxapi(config.zbx.url,config.zbx.token,config.debug)
+var zbxcli = new zbxapi(config.zbx.url,config.zbx.token,config.debug,config.exporter.cache_time)
 
 
 var applis = {  "status":1,"RootPath":__dirname}
